@@ -42,17 +42,42 @@ function addBook(req, res){
     return res.status(201).send("Berhasil menambahkan buku")
 }
 //todo : tambahkan fungsi untuk delete dan update
-function deleteBook(){
+function deleteBook(req, res){
+    const { id } = req.params
+    let result = books.findIndex((el) => el.id == id)
 
+    if(!result) return res.status(404).send("Data tidak ditemukan!")
+
+    books.splice(result, 1)
+
+    return res.status(200).send("Data berhasil di hapus")
 }
 
-function updateBook(){
+function updateBook(req, res){
+    const { id } = req.params
+    let result = books.findIndex((el) => el.id == id)
+    console.log(result);
 
+    if(result < 0) return res.status(404).send("Data tidak ditemukan!")
+
+    const { isbn, title, author, price } = req.body 
+
+    books[result] = {
+        ...books[result],
+        isbn: isbn || books[result].isbn,
+        title: title || books[result].title,
+        author: author || books[result].author,
+        price: +price || books[result].price
+    }
+
+    return res.status(200).send("Data berhasil di update")
 }
 
 //todo : export delete dan update
 module.exports = {
     getBooks,
     getBookById,
-    addBook
+    addBook,
+    deleteBook,
+    updateBook
 }

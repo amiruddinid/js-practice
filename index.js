@@ -1,5 +1,7 @@
 const express = require('express')
-const { getBooks, getBookById, addBook} = require('./server/api/books')
+const { getBooks, getBookById, addBook, deleteBook, updateBook} = 
+
+require('./server/api/books')
 const app = express();
 
 const PORT = process.env.PORT || 8000;
@@ -14,6 +16,8 @@ app.get("/", (req, res) => {
 app.get("/api/v1/books", getBooks)
 app.get("/api/v1/books/:id", getBookById)
 app.post("/api/v1/books", addBook)
+app.put("/api/v1/books/:id", updateBook)
+app.delete("/api/v1/books/:id", deleteBook)
 //todo tambahkan endpoint untuk delete dan update
 
 app.listen(PORT, () => {
