@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 //setup view engine
-app.use(express.static('public'))
+app.use("/public", express.static(path.resolve(__dirname, 'public')));
 app.set('views', path.join(__dirname, './server/views'))
 app.set('view engine', 'ejs')
 
