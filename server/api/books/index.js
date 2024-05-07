@@ -11,17 +11,26 @@ const books = [
 function getBooks(req, res){
     let result;
     const { q } = req.query
+
     if(!q) {
         return res.status(200).json(books)
     }
 
-    result = books.find((el) => el.title === q)
+    result = books.find((el) => {
+        console.log(el.title.includes(q))
+        return el.title.includes(q)
+    })
+    
+
     return res.status(200).json(result)
 }
 
 function getBookById(req, res){
     const { id } = req.params
-    let result = books.find((el) => el.id === id)
+    let result = books.find((el) => el.id == id)
+
+    if(!result) return res.status(404).send("Data tidak ditemukan!")
+
     return res.status(200).json(result)
 }
 
