@@ -1,5 +1,6 @@
 const express = require('express')
 const path = require('path');
+const upload = require('./server/middleware/multer')
 const { getBooks, getBookById, addBook, deleteBook, updateBook} = 
 
 require('./server/api/books')
@@ -8,6 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 //setup view engine
+app.use(express.static('public'))
 app.set('views', path.join(__dirname, './server/views'))
 app.set('view engine', 'ejs')
 
@@ -35,7 +37,7 @@ app.get("/api/v1/books", isAdmin, getBooks)
 // get detail specific data by id
 app.get("/api/v1/books/:id", getBookById)
 // add new data
-app.post("/api/v1/books", addBook)
+app.post("/api/v1/books", upload.single("img") ,addBook)
 // update existing data using id 
 app.put("/api/v1/books/:id", updateBook)
 // delete existing data using id

@@ -4,7 +4,8 @@ const books = [
         title: "Buku Harmony",
         isbn: 12312048102,
         price: 20000,
-        author: "Qlippoth"
+        author: "Qlippoth",
+        img: ''
     }
 ];
 
@@ -38,7 +39,11 @@ function addBook(req, res){
     if(!req.body){
         return res.status(400).send("Invalid Request")
     }
-    books.push(req.body)
+    const url = `/public/uploads/${req.file.filename}`
+    books.push({
+        ...req.body,
+        img: url
+    })
     return res.status(201).send("Berhasil menambahkan buku")
 }
 //todo : tambahkan fungsi untuk delete dan update
