@@ -62,18 +62,32 @@ function deleteBook(req, res){
 function updateBook(req, res){
     const { id } = req.params
     let booksId = books.findIndex((el) => el.id == id)
-    const fileBase64 = req.file.buffer.toString("base64")
-    const file = `data:${req.file.mimetype};base64,${fileBase64}`
 
     if(booksId < 0) return res.status(404).send("Data tidak ditemukan!")
+
+    const { isbn, title, author, price, img } = req.body 
+
+    if(!req.file){
+        books[booksId] = {
+            ...books[booksId],
+            isbn: isbn || books[booksId].isbn,
+            title: title || books[booksId].title,
+            author: author || books[booksId].author,
+            price: +price || books[booksId].price,
+            img: img || books[booksId].img
+        }
+
+        return res.status(200).send("Data berhasil di update")
+    }
+
+    const fileBase64 = req.file.buffer.toString("base64")
+    const file = `data:${req.file.mimetype};base64,${fileBase64}`
 
     cloudinary.uploader.upload(file, function(err, result){
         if(!!err){
             console.log(err)
             return res.status(400).send("Gagal upload file")
         }
-
-        const { isbn, title, author, price } = req.body 
 
         books[booksId] = {
             ...books[booksId],
