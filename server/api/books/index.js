@@ -1,3 +1,4 @@
+const cloudinary = require('../../middleware/cloudinary')
 const books = [
     {
         id: 0,
@@ -60,22 +61,31 @@ function deleteBook(req, res){
 
 function updateBook(req, res){
     const { id } = req.params
-    let result = books.findIndex((el) => el.id == id)
-    console.log(result);
+    let booksId = books.findIndex((el) => el.id == id)
+    const fileBase64 = req.file.buffer.toString("base64")
+    const file = `data:${req.file.mimetype};base64,${fileBase64}`
 
-    if(result < 0) return res.status(404).send("Data tidak ditemukan!")
+    if(booksId < 0) return res.status(404).send("Data tidak ditemukan!")
 
-    const { isbn, title, author, price } = req.body 
+    cloudinary.uploader.upload(file, function(err, result){
+        if(!!err){
+            console.log(err)
+            return res.status(400).send("Gagal upload file")
+        }
 
-    books[result] = {
-        ...books[result],
-        isbn: isbn || books[result].isbn,
-        title: title || books[result].title,
-        author: author || books[result].author,
-        price: +price || books[result].price
-    }
+        const { isbn, title, author, price } = req.body 
 
-    return res.status(200).send("Data berhasil di update")
+        books[booksId] = {
+            ...books[booksId],
+            isbn: isbn || books[booksId].isbn,
+            title: title || books[booksId].title,
+            author: author || books[booksId].author,
+            price: +price || books[booksId].price,
+            img: result.url
+        }
+
+        return res.status(200).send("Data berhasil di update")
+    })
 }
 
 //todo : export delete dan update

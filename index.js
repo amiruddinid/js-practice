@@ -1,6 +1,9 @@
+require('dotenv').config()
+
 const express = require('express')
 const path = require('path');
 const upload = require('./server/middleware/multer')
+const uploadOnMemory = require('./server/middleware/multerMemory')
 const { getBooks, getBookById, addBook, deleteBook, updateBook} = 
 
 require('./server/api/books')
@@ -39,7 +42,7 @@ app.get("/api/v1/books/:id", getBookById)
 // add new data
 app.post("/api/v1/books", upload.single("img") ,addBook)
 // update existing data using id 
-app.put("/api/v1/books/:id", updateBook)
+app.put("/api/v1/books/:id", uploadOnMemory.single('img'), updateBook)
 // delete existing data using id
 app.delete("/api/v1/books/:id", deleteBook)
 //todo tambahkan endpoint untuk delete dan update
