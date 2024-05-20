@@ -1,6 +1,6 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import { getBooks, getBookById, deleteBook, addBook, updateBook} 
-from './server/api/books'
+from './app/controllers/api/books'
 import path from 'path'
 //knex
 import knex from 'knex'

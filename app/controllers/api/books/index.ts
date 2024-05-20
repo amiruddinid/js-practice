@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 //knex
 import { BooksModel } from '../../../models/books';
 //endknex
-import {UploadApiResponse, UploadApiErrorResponse} from 'cloudinary';
-import cloudinary from '../../middleware/cloudinary';
+import { UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
+import cloudinary from '../../../middleware/cloudinary';
 
 //knex
 async function getBooks(req:Request, res:Response){
@@ -118,7 +118,7 @@ async function updateBook(req:Request, res:Response){
 }
 
 //todo : export delete dan update
-export {
+export default {
     getBooks,
     getBookById,
     addBook,
