@@ -23,6 +23,11 @@ apiRouter.put("/api/v1/books/:id", uploadOnMemory.single('cover'), controllers.a
 apiRouter.delete("/api/v1/books/:id", controllers.api.books.deleteBook)
 //todo tambahkan endpoint untuk delete dan update
 
+apiRouter.post("/api/v1/register", 
+    controllers.api.users.register);
+apiRouter.post("/api/v1/login", 
+    controllers.api.users.login);
+
 apiRouter.use(controllers.api.main.onLost) //Error404
 apiRouter.use(controllers.api.main.onError) //Error500
 
