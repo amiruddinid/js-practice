@@ -65,8 +65,12 @@ async function deleteBook(req:Request, res:Response){
     const { id } = req.params
 
     try{
-        const books = await BooksModel.query().deleteById(id).throwIfNotFound();
-        return res.status(200).send("Data berhasil di hapus")
+        BooksModel
+            .query()
+            .deleteById(id)
+            .throwIfNotFound()
+            .then(() => res.status(200).send("Data berhasil di hapus"))
+            .catch
 
     } catch(e) {
         return res.status(404).send("Data tidak ditemukan!")

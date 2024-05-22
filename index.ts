@@ -42,21 +42,6 @@ function isAdmin(req:Request, res:Response, next:NextFunction){
     res.status(401).send("kamu bukan admin!")
 }
 
-app.get('/', (req: Request, res: Response) => {
-    res.render('index', {
-        name: req.query.name || 'Guest'
-    })
-})
-// listing all data (overview)
-app.get("/api/v1/books", getBooks)
-// get detail specific data by id
-app.get("/api/v1/books/:id", getBookById)
-// add new data
-app.post("/api/v1/books", uploadOnMemory.single('cover'), addBook)
-// update existing data using id 
-app.put("/api/v1/books/:id", uploadOnMemory.single('cover'), updateBook)
-// delete existing data using id
-app.delete("/api/v1/books/:id", deleteBook)
-//todo tambahkan endpoint untuk delete dan update
+
 
 app.listen(port, () => console.log(`app listen on http://localhost:${port}`))
