@@ -1,6 +1,6 @@
 import express from 'express'
 import controllers from '../app/controllers'
-import { authorize } from '../app/middleware/authorization'
+import { authorize, checkAccess } from '../app/middleware/authorization'
 import uploadOnMemory from '../app/middleware/multerMemory'
 
 const apiRouter = express.Router()
@@ -18,12 +18,13 @@ appRouter.post('/login', controllers.app.user.login)
 appRouter.get('/logout', controllers.app.user.logout)
 
 
+//router for REST API
 // listing all data (overview)
-apiRouter.get("/api/v1/books", authorize, controllers.api.books.getBooks)
+apiRouter.get("/api/v1/books", [authorize, checkAccess(['admin'])], controllers.api.books.getBooks)
 // get detail specific data by id
 apiRouter.get("/api/v1/books/:id", controllers.api.books.getBookById)
 // add new data
-apiRouter.post("/api/v1/books", [authorize, uploadOnMemory.single('cover')], controllers.api.books.addBook)
+apiRouter.post("/api/v1/books", authorize, uploadOnMemory.single('cover'), controllers.api.books.addBook)
 // update existing data using id 
 apiRouter.put("/api/v1/books/:id", uploadOnMemory.single('cover'), controllers.api.books.updateBook)
 // delete existing data using id
