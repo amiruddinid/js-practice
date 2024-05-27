@@ -1,5 +1,7 @@
 import api from './api'
+import app from './app'
 
 export default {
-    api
+    api,
+    app
 }

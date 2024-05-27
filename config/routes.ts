@@ -3,13 +3,19 @@ import controllers from '../app/controllers'
 import uploadOnMemory from '../app/middleware/multerMemory'
 
 const apiRouter = express.Router()
-// const appRouter = express.Router()
+const appRouter = express.Router()
 
 // appRouter.get('/', (req: Request, res: Response) => {
 //     res.render('index', {
 //         name: req.query.name || 'Guest'
 //     })
 // })
+//router for APP or view engine
+appRouter.get('/', controllers.app.user.index)
+appRouter.get('/login', controllers.app.user.loginView)
+appRouter.post('/login', controllers.app.user.login)
+appRouter.get('/logout', controllers.app.user.logout)
+
 
 // listing all data (overview)
 apiRouter.get("/api/v1/books", controllers.api.books.getBooks)
@@ -31,4 +37,7 @@ apiRouter.post("/api/v1/login",
 apiRouter.use(controllers.api.main.onLost) //Error404
 apiRouter.use(controllers.api.main.onError) //Error500
 
-export default apiRouter;
+export default {
+    appRouter,
+    apiRouter
+};
