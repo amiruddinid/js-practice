@@ -35,7 +35,8 @@ async function getBookById(req:Request, res:Response){
     
 }
 
-async function addBook(req:Request, res:Response){
+async function addBook(req:any, res:Response){
+    console.log(req.user);
     if(!req.body){
         return res.status(400).send("Invalid Request")
     }

@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 const salt = 10;
 
@@ -20,4 +21,8 @@ export async function checkPassword(encryptedPassword: string, password: string)
     } catch(e) {
         throw e
     }
+}
+
+export async function createToken(payload:any){
+    return jwt.sign(payload, "Rahasia", { expiresIn: '1800s' })
 }
