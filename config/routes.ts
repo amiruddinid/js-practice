@@ -21,8 +21,8 @@ appRouter.get('/logout', controllers.app.user.logout)
 //router for REST API
 // listing all data (overview)
 apiRouter.route("/books")
-    .get([authorize, checkAccess(['user'])], controllers.api.books.getBooks) // get book list
-    .post(authorize, uploadOnMemory.single('cover'), controllers.api.books.addBook) // add book
+    .get(controllers.api.books.getBooks) // get book list
+    .post(uploadOnMemory.single('cover'), controllers.api.books.addBook) // add book
 
 apiRouter.route("/books/:id")
     .get(controllers.api.books.getBookById) //get books by id

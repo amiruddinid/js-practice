@@ -1,23 +1,12 @@
 import { Request, Response } from 'express';
-//knex
-import { BooksModel } from '../../../models/books';
-//endknex
+import BooksService from "../../../services/bookService"
 import { UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
 import cloudinary from '../../../middleware/cloudinary';
 
 //knex
 async function getBooks(req:Request, res:Response){
     const { q } = req.query
-
-    if(!q) {
-        const books = await BooksModel.query();
-        return res.status(200).json(books)
-    }
-
-    const books = await BooksModel
-        .query()
-        .whereLike('title', `%${q}%`)
-        .orWhereLike('author', `%${q}%`)
+    const books = await BooksService.list(q)
 
     return res.status(200).json(books)
 }
@@ -27,7 +16,7 @@ async function getBookById(req:Request, res:Response){
     const { id } = req.params
 
     try{
-        const books = await BooksModel.query().findById(id).throwIfNotFound();
+        const books = await BooksService.get(id)
         return res.status(200).json(books)
     } catch(e) {
         return res.status(404).send("Data tidak ditemukan!")
@@ -36,43 +25,31 @@ async function getBookById(req:Request, res:Response){
 }
 
 async function addBook(req:any, res:Response){
-    console.log(req.user);
     if(!req.body){
         return res.status(400).send("Invalid Request")
     }
 
-    const fileBase64 = req.file?.buffer.toString("base64")
-    const file = `data:${req.file?.mimetype};base64,${fileBase64}`
-
-    cloudinary.uploader.upload(file, async function(err:UploadApiErrorResponse, 
-        result:UploadApiResponse){
-        if(!!err){
-            console.log(err)
-            return res.status(400).send("Gagal upload file")
-        }
-
-        const books = await BooksModel.query().insert(
+    try{
+        const fileUpload = await BooksService.upload(req.file)
+        const books = await BooksService.create(
             {
                 ...req.body,
-                cover: result.url
+                cover: fileUpload.url
             }
-        ).returning('*')
+        )
 
         return res.status(201).json(books)
-    })
+    }catch(e){
+        return res.status(400).send("Gagal upload file")
+    }
 }
 //todo : tambahkan fungsi untuk delete dan update
 async function deleteBook(req:Request, res:Response){
     const { id } = req.params
 
     try{
-        BooksModel
-            .query()
-            .deleteById(id)
-            .throwIfNotFound()
-            .then(() => res.status(200).send("Data berhasil di hapus"))
-            .catch
-
+        const books = BooksService.delete(id);
+        res.status(200).send("Data berhasil di hapus")
     } catch(e) {
         return res.status(404).send("Data tidak ditemukan!")
     }
@@ -83,43 +60,31 @@ async function updateBook(req:Request, res:Response){
 
     if(!req.file){
         try{
-            const books = await BooksModel.query()
-                .where({ id })
-                .patch(req.body)
-                .throwIfNotFound()
-                .returning("*");
-
+            const books = await BooksService.update(id, req.body)
             return res.status(200).send("Data berhasil di update")
         }catch (e){
             return res.status(404).send("Data tidak ditemukan!")
         }
     }
 
-    const fileBase64 = req.file.buffer.toString("base64")
-    const file = `data:${req.file.mimetype};base64,${fileBase64}`
-
-    cloudinary.uploader.upload(file, async function(err:UploadApiErrorResponse, 
-        result:UploadApiResponse){
-        if(!!err){
-            console.log(err)
-            return res.status(400).send("Gagal upload file")
-        }
+    try{
+        let fileUpload
 
         try{
-            const books = await BooksModel.query()
-                .where({ id })
-                .patch({
-                    ...req.body,
-                    cover: result.url
-                })
-                .throwIfNotFound()
-                .returning("*");
-
-            return res.status(200).send("Data berhasil di update")
-        }catch (e){
+            fileUpload = await BooksService.upload(req.file)
+        } catch(e){
             return res.status(404).send("Data tidak ditemukan!")
         }
-    })
+
+        const books = BooksService.update(id, {
+            ...req.body,
+            cover: fileUpload.url
+        })
+        return res.status(200).send("Data berhasil di update")
+    } catch(e) {
+        return res.status(400).send("Gagal upload file")
+    }
+
 }
 
 //todo : export delete dan update
