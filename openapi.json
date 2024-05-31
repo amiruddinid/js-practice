@@ -1,0 +1,389 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "Books Store Documentation",
+      "description": "Dokumentasi API Toko buku",
+      "contact": {
+        "email": "amier.dev@gmail.com"
+      },
+      "version": "1.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8000/api/v1"
+      },
+      {
+        "url": "http://localhost:3000/api/v1"
+      }
+    ],
+    "tags": [
+      {
+        "name": "auth",
+        "description": "Everything about authentication"
+      },
+      {
+        "name": "books",
+        "description": "Books CRUD"
+      },
+      {
+        "name": "users",
+        "description": "Users CRUD"
+      }
+    ],
+    "paths": {
+      "/login": {
+        "post": {
+          "tags": [
+            "auth"
+          ],
+          "summary": "Do login",
+          "description": "login",
+          "operationId": "login",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "user@mail.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": 1234
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Successful Operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "Success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Berhasil Login!"
+                      },
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 2
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Hello World!"
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "user@mail.com"
+                          },
+                          "token": {
+                            "type": "string",
+                            "example": "13810a0sedu1231.129309a7sd071923.1293u0as7d0as70213"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Login Failed!",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "Failed"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Gagal login password salah!"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/register": {
+        "post": {
+          "tags": [
+            "auth"
+          ],
+          "summary": "register user data",
+          "description": "register",
+          "operationId": "register",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "user@mail.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": 1234
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Budi Abcd"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "Success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Berhasil Register!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Email sudah terdaftar",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "Fail!"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Email sudah terdaftar!"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/books": {
+        "get": {
+          "tags": [
+            "books"
+          ],
+          "summary": "Get books lists",
+          "description": "Get books Lists",
+          "operationId": "getBooks",
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "description": "Pagination page",
+              "required": false,
+              "schema": {
+                "type": "number",
+                "default": 1
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Pagination limit",
+              "required": false,
+              "schema": {
+                "type": "number",
+                "default": 10
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "example": "Buku A"
+                        },
+                        "author": {
+                          "type": "string",
+                          "example": "Shakespear"
+                        },
+                        "price": {
+                          "type": "number",
+                          "example": 50000
+                        },
+                        "cover": {
+                          "type": "string",
+                          "example": "http://cloudinary.com/213125123"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "Error!"
+                      },
+                      "code": {
+                        "type": "integer",
+                        "example": 500
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Internal Server Error!"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "auth": []
+            }
+          ]
+        },
+        "post": {
+          "tags": [
+            "books"
+          ],
+          "summary": "Add a new books",
+          "description": "Add a new books",
+          "operationId": "addBooks",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type":"object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Buku A"
+                    },
+                    "author": {
+                      "type": "string",
+                      "example": "Shakespear"
+                    },
+                    "price": {
+                      "type": "number",
+                      "example": 50000
+                    },
+                    "cover": {
+                      "type": "string",
+                      "format": "binary",
+                      "example": "http://www.africau.edu/images/default/sample.pdf"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "Success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Berhasil Register!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Email sudah terdaftar",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "Fail!"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Email sudah terdaftar!"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "auth": []
+            }
+          ]
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "auth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  }

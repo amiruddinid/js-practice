@@ -40,7 +40,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 app.use(routes.appRouter)
-app.use(routes.apiRouter)
+app.use('/api/v1/', routes.apiRouter)
 
 
 export default app;

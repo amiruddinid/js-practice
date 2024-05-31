@@ -3,39 +3,38 @@ import controllers from '../app/controllers'
 import { authorize, checkAccess } from '../app/middleware/authorization'
 import uploadOnMemory from '../app/middleware/multerMemory'
 
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../openapi.json';
+
 const apiRouter = express.Router()
 const appRouter = express.Router()
 
-// appRouter.get('/', (req: Request, res: Response) => {
-//     res.render('index', {
-//         name: req.query.name || 'Guest'
-//     })
-// })
 //router for APP or view engine
 appRouter.get('/', controllers.app.user.index)
-appRouter.get('/login', controllers.app.user.loginView)
-appRouter.post('/login', controllers.app.user.login)
-appRouter.get('/logout', controllers.app.user.logout)
+appRouter
+    .route('/login')
+    .get(controllers.app.user.loginView)
+    .post(controllers.app.user.login)
 
+appRouter.get('/logout', controllers.app.user.logout)
 
 //router for REST API
 // listing all data (overview)
-apiRouter.get("/api/v1/books", [authorize, checkAccess(['admin'])], controllers.api.books.getBooks)
-// get detail specific data by id
-apiRouter.get("/api/v1/books/:id", controllers.api.books.getBookById)
-// add new data
-apiRouter.post("/api/v1/books", authorize, uploadOnMemory.single('cover'), controllers.api.books.addBook)
-// update existing data using id 
-apiRouter.put("/api/v1/books/:id", uploadOnMemory.single('cover'), controllers.api.books.updateBook)
-// delete existing data using id
-apiRouter.delete("/api/v1/books/:id", controllers.api.books.deleteBook)
-//todo tambahkan endpoint untuk delete dan update
+apiRouter.route("/books")
+    .get([authorize, checkAccess(['user'])], controllers.api.books.getBooks) // get book list
+    .post(authorize, uploadOnMemory.single('cover'), controllers.api.books.addBook) // add book
 
-apiRouter.post("/api/v1/register", 
-    controllers.api.users.register);
-apiRouter.post("/api/v1/login", 
-    controllers.api.users.login);
-apiRouter.get('/api/v1/whoami', authorize, controllers.api.users.whoAmI)
+apiRouter.route("/books/:id")
+    .get(controllers.api.books.getBookById) //get books by id
+    .put(uploadOnMemory.single('cover'), controllers.api.books.updateBook) //update books
+    .delete(controllers.api.books.deleteBook) // delete book
+
+apiRouter.post("/register", controllers.api.users.register);
+apiRouter.post("/login", controllers.api.users.login);
+apiRouter.get('/whoami', authorize, controllers.api.users.whoAmI)
+
+apiRouter.use('/api-docs', swaggerUi.serve);
+apiRouter.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 apiRouter.use(controllers.api.main.onLost) //Error404
 apiRouter.use(controllers.api.main.onError) //Error500
