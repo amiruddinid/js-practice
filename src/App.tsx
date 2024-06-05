@@ -1,7 +1,11 @@
+import {Routes, Route} from 'react-router-dom';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import Counter from './components/counter'
+import Layout from './components/layout'
+import Home from './pages/home';
+import About from './pages/about';
 
 function App() {
   return (
@@ -28,6 +32,12 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+        </Route>
+      </Routes>
     </>
   )
 }
