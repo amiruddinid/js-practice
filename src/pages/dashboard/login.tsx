@@ -1,5 +1,7 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { Button, Form, FormGroup, Input, Label } from "reactstrap";
+// import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../../hooks/useAuth';
 
 //TODO: refactor form
@@ -32,6 +34,23 @@ export default function login() {
     login(data.data)
   }
 
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: async codeResponse => {
+      const res = await fetch("http://localhost:8000/api/v1/auth/google", {
+        method: "post",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            code: codeResponse.code
+        })
+      })
+      console.log(res)
+    },
+    onError: errorResponse => console.log(errorResponse),
+    flow: 'auth-code'
+  })
+
   return (
     <div>
       <Form onSubmit={(e) => handleSubmit(e)}>
@@ -56,6 +75,15 @@ export default function login() {
           <Label for="examplePassword">Password</Label>
         </FormGroup>{" "}
         <Button>Submit</Button>
+        {/* <GoogleLogin 
+          onSuccess={credentialResponse => {
+            console.log(credentialResponse)
+          }}
+          onError={() => {
+            console.log('Login Failed')
+          }}
+        /> */}
+        <Button onClick={() => loginWithGoogle()}>Login with Google</Button>
       </Form>
     </div>
   );

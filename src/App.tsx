@@ -21,14 +21,12 @@ function App() {
             <Route path="about" element={<About />} />
             <Route path="books" element={<Books />} />
           </Route>
-          
             <Route path="/dashboard">
               <Route index element={
                 <Protected>
                   <HomeDashboard />
                 </Protected>
               } />
-              
               <Route path="login" element={<Login />} />
             </Route>
           </Routes>
