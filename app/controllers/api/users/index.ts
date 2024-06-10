@@ -2,6 +2,17 @@ import { Request, Response } from 'express';
 import { UsersModel } from '../../../models/users';
 import { encryptPassword, checkPassword, createToken } 
 from '../../../utils/encrypt';
+import { OAuth2Client, UserRefreshClient } from 'google-auth-library';
+
+const CLIENT_ID = '<GOOGLE_CLIENT_ID>'
+const CLIENT_SECRET = '<GOOGLE_CLIENT_SECRET>'
+
+
+const oAuth2Client = new OAuth2Client(
+    CLIENT_ID, //client id
+    CLIENT_SECRET, // client secret
+    'postmessage'
+)
 
 async function login(req:Request, res:Response){
     const { email, password } = req.body;
@@ -88,8 +99,27 @@ async function whoAmI(req:any, res:Response){
     })
 }
 
+async function googleAuth(req:Request, res:Response){
+    const  { tokens } = await oAuth2Client.getToken(req.body.code)
+    console.log(tokens)
+
+    res.status(200).json(tokens)
+}
+
+async function googleAuthRefresh(req:Request, res:Response){
+    const user = new UserRefreshClient(
+        CLIENT_ID,
+        CLIENT_SECRET,
+        req.body.refreshToken,
+    )
+    const { credentials } = await user.refreshAccessToken();
+    res.json(credentials)
+}
+
 export default {
     login,
     register,
-    whoAmI
+    whoAmI,
+    googleAuth,
+    googleAuthRefresh
 }

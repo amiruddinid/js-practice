@@ -1,6 +1,7 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import path from 'path';
 import knex from 'knex'
+import cors from 'cors';
 import { Model } from 'objection';
 import session from 'express-session';
 import routes from '../config/routes';
@@ -35,6 +36,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
+
+app.use(cors());
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())

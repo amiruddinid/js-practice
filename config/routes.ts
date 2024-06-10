@@ -33,6 +33,10 @@ apiRouter.post("/register", controllers.api.users.register);
 apiRouter.post("/login", controllers.api.users.login);
 apiRouter.get('/whoami', authorize, controllers.api.users.whoAmI)
 
+//OAUTH2 google
+apiRouter.post('/auth/google', controllers.api.users.googleAuth)
+apiRouter.post('/auth/google/refresh', controllers.api.users.googleAuthRefresh)
+
 apiRouter.use('/api-docs', swaggerUi.serve);
 apiRouter.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
