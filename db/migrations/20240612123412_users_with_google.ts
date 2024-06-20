@@ -10,9 +10,13 @@ export async function up(knex: Knex): Promise<void> {
 
 
 export async function down(knex: Knex): Promise<void> {
-    return knex.schema.alterTable('users', (table: Knex.TableBuilder) => {
-        table.dropNullable("password")
-        table.dropColumn("googleId")
-    })
+    return knex("users").whereNull("password").del()
+        .then(() => {
+            knex.schema.alterTable('users', (table: Knex.TableBuilder) => {
+                table.dropNullable("password")
+                table.dropColumn("googleId")
+            })
+        })
+    
 }
 

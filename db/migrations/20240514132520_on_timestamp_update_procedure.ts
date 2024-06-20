@@ -7,7 +7,7 @@ export async function up(knex: Knex): Promise<void> {
            CREATE OR REPLACE FUNCTION on_update_timestamp()
            RETURNS trigger AS $$
            BEGIN 
-             NEW.update_at = now();
+             NEW.updated_at = now();
              RETURN NEW;
            END;
         $$ language 'plpgsql';

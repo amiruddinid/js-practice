@@ -149,7 +149,8 @@ async function googleAuth(req:Request, res:Response){
                 password: null,
                 nama: payload?.name,
                 role: 'user', 
-                avatar: payload?.picture
+                avatar: payload?.picture,
+                googleId: payload?.sub
             }        
         ).returning('*')
 
