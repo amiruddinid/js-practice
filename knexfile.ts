@@ -1,4 +1,12 @@
 import type { Knex } from "knex";
+import dotenv from 'dotenv';
+
+const envPath = process.env.NODE_ENV === 'development' ? 
+  '.env' : `.env.${process.env.NODE_ENV}`
+
+console.log(process.env.NODE_ENV);
+
+dotenv.config({path: envPath})
 
 // Update with your config settings.
 
@@ -6,10 +14,10 @@ const config: { [key: string]: Knex.Config } = {
   development: {
     client: "postgresql",
     connection: {
-      database: "book_store",
-      user: "postgres",
-      password: "1234",
-      port: 5433
+      database: process.env.DB,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      port: Number(process.env.DB_PORT)
     },
     pool: {
       min: 2,
@@ -23,7 +31,6 @@ const config: { [key: string]: Knex.Config } = {
       directory: "./db/seeds"
     }
   },
-
   staging: {
     client: "postgresql",
     connection: {
@@ -39,22 +46,28 @@ const config: { [key: string]: Knex.Config } = {
       tableName: "knex_migrations"
     }
   },
-
   production: {
     client: "postgresql",
     connection: {
-      database: "my_db",
-      user: "username",
-      password: "password"
+      host: process.env.DB_HOST,
+      database: process.env.DB,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      port: Number(process.env.DB_PORT)
     },
     pool: {
       min: 2,
       max: 10
     },
     migrations: {
-      tableName: "knex_migrations"
+      tableName: "knex_migrations",
+      directory: "./db/migrations"
+    },
+    seeds: {
+      directory: "./db/seeds"
     }
   },
 };
 
-module.exports = config;
+//module.export = config;
+export default config;

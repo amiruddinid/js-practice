@@ -4,9 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only ./bin/www",
+    "start": "set NODE_ENV=production& ts-node ./bin/www",
+    "dev": "set NODE_ENV=development& ts-node-dev --respawn --transpile-only ./bin/www",
     "test": "jest",
-    "lint": "eslint ./app/index.ts ./app/middleware/authorization.ts"
+    "lint": "eslint ./app/index.ts ./app/middleware/authorization.ts",
+    "db:migrate": "knex migrate:latest",
+    "db:seed": "knex seed:run",
+    "db:rollback": "knex migrate:rollback",
+    "db:rollback:all": "knex migrate:rollback --all"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +22,7 @@
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.2.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
@@ -40,10 +46,12 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/multer": "^1.4.11",
     "@types/pg": "^8.11.6",
+    "@types/supertest": "^6.0.2",
     "@types/swagger-ui-express": "^4.1.6",
     "eslint": "^8.57.0",
     "globals": "^15.6.0",
     "jest": "^29.7.0",
+    "supertest": "^7.0.0",
     "ts-jest": "^29.1.5",
     "typescript-eslint": "^7.13.1"
   }

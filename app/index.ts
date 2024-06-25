@@ -1,3 +1,9 @@
+import dotenv from 'dotenv';
+const envPath = process.env.NODE_ENV === 'development' ? 
+  '.env' : `.env.${process.env.NODE_ENV}`
+  
+dotenv.config({path: envPath})
+
 import express, { Express, Request, Response, NextFunction } from 'express';
 import path from 'path';
 import knex from 'knex'
@@ -5,19 +11,14 @@ import cors from 'cors';
 import { Model } from 'objection';
 import session from 'express-session';
 import routes from '../config/routes';
+import knexConfig from '../knexfile';
 
 const app: Express = express();
 
+
+
 //knex
-const knexInstance = knex({
-    client: "postgresql",
-    connection: {
-        database: "book_store",
-        user: "postgres",
-        password: "1234",
-        port: 5433
-    }
-})
+const knexInstance = knex(knexConfig[process.env.NODE_ENV || "development"])
 const port = 5000;
 
 Model.knex(knexInstance);

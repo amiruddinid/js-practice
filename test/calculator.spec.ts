@@ -10,6 +10,6 @@ describe('Calculator', () => {
         expect(calc).toHaveProperty("a", 50)
         expect(calc).toHaveProperty("b", 20)
     })
-
+    
 
 })

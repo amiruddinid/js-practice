@@ -12,7 +12,7 @@ describe("Encrypt", () => {
     let pass:string;
     it("encryptPassword should return string", async () => {
         pass = await encryptPassword('12345');
-        expect(typeof pass).toBe('string')
+        expect(pass).toEqual(expect.stringMatching(/\$2a\$10\$.+/))
     })
     it("checkPassword should return false", async () => {
         const check = await checkPassword(pass, '1234')

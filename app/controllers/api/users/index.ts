@@ -28,7 +28,7 @@ async function login(req:Request, res:Response){
     }
 
     const isPasswordCorrect = await 
-        checkPassword(user.password, password)
+        checkPassword(user.password as string, password)
 
     if(!isPasswordCorrect){
         return res.status(401)
@@ -45,7 +45,7 @@ async function login(req:Request, res:Response){
         updatedAt: user.updated_at
     })
 
-    res.status(201).json({
+    res.status(200).json({
         message: "Berhasil Login",
         data: {
             id: user.id,
@@ -60,6 +60,11 @@ async function login(req:Request, res:Response){
 
 async function register(req:Request, res:Response){
     const { email, password, nama, avatar } = req.body;
+    if(!email || !password || !nama){
+        return res.status(400).json({
+            message: "Silahkan input data dengan lengkap!"
+        })
+    }
     try{
         const encryptedPassword = await encryptPassword(password)
 
@@ -83,9 +88,8 @@ async function register(req:Request, res:Response){
             }
         })
     } catch(e){
-        console.error(e)
-        res.status(500).json({
-            message: "Internal Server Error"
+        res.status(409).json({
+            message: "Email sudah terdaftar!"
         })
     }
 }

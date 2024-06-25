@@ -26,7 +26,7 @@ async function login(req:any, res:any){
     }
 
     const isPasswordCorrect = await 
-        checkPassword(user.password, password)
+        checkPassword(user.password as string, password)
 
     if(!isPasswordCorrect){
         return res.status(401)

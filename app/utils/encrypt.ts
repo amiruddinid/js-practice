@@ -13,7 +13,6 @@ export async function encryptPassword(password: string){
 export async function checkPassword(encryptedPassword: string, password: string){
     const result = await bcrypt.compare(password, encryptedPassword)
     return result
-
 }
 
 export async function createToken(payload: string | Buffer | object){
