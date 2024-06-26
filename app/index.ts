@@ -17,6 +17,7 @@ const app: Express = express();
 
 //knex
 const knexInstance = knex(knexConfig[process.env.NODE_ENV || "development"])
+console.log(knexConfig[process.env.NODE_ENV || "development"])
 
 Model.knex(knexInstance);
 //endknex
