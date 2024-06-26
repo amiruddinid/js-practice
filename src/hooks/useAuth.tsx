@@ -6,14 +6,22 @@ interface AuthProps {
     children: React.ReactElement
 }
 
-const AuthContext = createContext({});
+export type AuthContextType = {
+    user: {
+        id: number,
+        email: string
+    },
+    login: (data: object) => Promise<void>,
+    logout: () => void
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: AuthProps) => {
     const [user, setUser] = useLocalStorage("user", null)
     const navigate = useNavigate();
 
     const login = async(data: object) => {
-        console.log(data)
         setUser(data)
         navigate("/dashboard", { replace:true })
     }
@@ -39,6 +47,6 @@ export const AuthProvider = ({ children }: AuthProps) => {
 }
 
 export const useAuth = () => {
-    return useContext(AuthContext);
+    return useContext(AuthContext) as AuthContextType;
 }
 

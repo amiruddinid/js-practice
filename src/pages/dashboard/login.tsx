@@ -6,7 +6,7 @@ import { useAuth } from '../../hooks/useAuth';
 
 //TODO: refactor form
 
-export default function login() {
+export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const { login } = useAuth()
@@ -45,7 +45,8 @@ export default function login() {
             code: codeResponse.code
         })
       })
-      console.log(res)
+      const data = await res.json()
+      login(data.data)
     },
     onError: errorResponse => console.log(errorResponse),
     flow: 'auth-code'
