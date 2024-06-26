@@ -4,8 +4,6 @@ import dotenv from 'dotenv';
 const envPath = process.env.NODE_ENV === 'development' ? 
   '.env' : `.env.${process.env.NODE_ENV}`
 
-console.log(process.env.NODE_ENV);
-
 dotenv.config({path: envPath})
 
 // Update with your config settings.

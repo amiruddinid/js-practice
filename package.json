@@ -5,21 +5,20 @@
   "main": "index.js",
   "packageManager": "pnpm@8.14.0",
   "scripts": {
-    "start": "set NODE_ENV=production& ts-node ./bin/www",
+    "start": "set NODE_ENV=production& node ./build/bin/www",
     "dev": "set NODE_ENV=development& ts-node-dev --respawn --transpile-only ./bin/www",
     "test": "jest",
     "lint": "eslint ./app/index.ts ./app/middleware/authorization.ts",
     "db:migrate": "knex migrate:latest",
     "db:seed": "knex seed:run",
     "db:rollback": "knex migrate:rollback",
-    "db:rollback:all": "knex migrate:rollback --all"
+    "db:rollback:all": "knex migrate:rollback --all",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/express": "^4.17.21",
-    "@types/node": "^20.12.11",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.2.0",
     "cors": "^2.8.5",
@@ -34,11 +33,12 @@
     "objection": "^3.1.4",
     "pg": "^8.11.5",
     "swagger-ui-express": "^5.0.0",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
+    "ts-node-dev": "^2.0.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.11",
     "@eslint/js": "^9.5.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
